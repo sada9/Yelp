@@ -1,7 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -16,12 +21,48 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mI9-Zf-bd6">
+                                <rect key="frame" x="91" y="260" width="193" height="68"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yelp Client" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YPr-eN-mQf">
+                                        <rect key="frame" x="66" y="21" width="112.5" height="26.5"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="YelpLogo" translatesAutoresizingMaskIntoConstraints="NO" id="wvb-t5-txI">
+                                        <rect key="frame" x="18" y="15" width="38" height="33"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="33" id="DpO-YU-uDN"/>
+                                            <constraint firstAttribute="width" constant="38" id="Ukl-gp-tNM"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="wvb-t5-txI" secondAttribute="bottom" constant="20" id="0Rw-bh-Bir"/>
+                                    <constraint firstItem="wvb-t5-txI" firstAttribute="top" secondItem="mI9-Zf-bd6" secondAttribute="top" constant="15" id="M3S-eg-rqV"/>
+                                    <constraint firstItem="YPr-eN-mQf" firstAttribute="leading" secondItem="wvb-t5-txI" secondAttribute="trailing" constant="10" id="S2a-3t-obd"/>
+                                    <constraint firstItem="YPr-eN-mQf" firstAttribute="top" secondItem="mI9-Zf-bd6" secondAttribute="top" constant="21" id="i9a-Rb-pk6"/>
+                                    <constraint firstItem="wvb-t5-txI" firstAttribute="leading" secondItem="mI9-Zf-bd6" secondAttribute="leading" constant="18" id="zqb-E3-hxQ"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="mI9-Zf-bd6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="S2r-h6-kIP"/>
+                            <constraint firstItem="mI9-Zf-bd6" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="240" id="fFx-19-Kbe"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="mI9-Zf-bd6" secondAttribute="bottom" constant="339" id="nmS-LM-GBo"/>
+                            <constraint firstItem="mI9-Zf-bd6" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="75" id="s71-Y4-N5K"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="YelpLogo" width="512" height="512"/>
+    </resources>
 </document>

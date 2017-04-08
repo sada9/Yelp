@@ -16,9 +16,13 @@ class SearchListViewModel {
 
     weak var delegate: SearchListViewModelListener?
     var businesses: [Business]?
+    var filteredBusinesses: [Business]?
     private let dataManager = DataManager()
+    var isSearchActive = false
+    var searchFilters: SearchFilters?
+    var lastSearchKey: String?
 
-    var businessCount: Int {
+     private var businessCount: Int {
         get {
             guard let businesses = self.businesses else {
                 return 0
@@ -27,18 +31,50 @@ class SearchListViewModel {
         }
     }
 
+   private var filteredBusinessesCount: Int {
+        get {
+            guard let filteredBusinesses = self.filteredBusinesses else {
+                return 0
+            }
+            return filteredBusinesses.count
+        }
+    }
+
     init() {
         dataManager.delegate = self
         businesses = [Business]()
+
+        //initiate seach filter
+        searchFilters = SearchFilters(sortBy: Filter(name: "Best Match", value: "0", isOn: true) ,
+                                 categories: nil,
+                                 deals: Filter(name: "Offering a Deal", value: "Offering a Deal" , isOn: false),
+                                 distance: Filter(name: "Auto", value: "-1", isOn: true))
     }
 
     func search(key: String) {
-        dataManager.search(withTerm: key, sort: nil, categories: [], deals: nil)
+        lastSearchKey = key
+        dataManager.search(withTerm: lastSearchKey!, filter: searchFilters!)
+    }
+
+    func search() {
+        dataManager.search(withTerm: lastSearchKey!, filter: searchFilters!)
     }
 
     func business(at indexPath: IndexPath) -> Business? {
-        return businesses?[indexPath.row]
+
+        if isSearchActive {
+            return filteredBusinesses?[indexPath.row]
+        }
+        else {
+            return businesses?[indexPath.row]
+        }
     }
+    
+
+    func rowCount() -> Int {
+        return isSearchActive ? filteredBusinessesCount : businessCount
+    }
+
 }
 
 extension SearchListViewModel : DataManagerListener {
@@ -46,9 +82,15 @@ extension SearchListViewModel : DataManagerListener {
     func finishedFetchingData(result : Result) {
 
     switch result {
-        case .Success(let businesses):
-            print(businesses)
-            self.businesses = businesses
+        case .Success(let result):
+            print(result)
+            if isSearchActive {
+                self.filteredBusinesses = result
+            }
+            else {
+                self.businesses = result
+            }
+
             delegate?.dataReady()
 
         case .Failure(let errorStr):

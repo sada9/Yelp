@@ -7,22 +7,49 @@
 //
 
 import UIKit
+import FTIndicator
 
 class SearchListViewController: UIViewController, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
 
-
+    var searchBar: UISearchBar?
+    var filterButton: UIButton?
+    var searchActive = false
+   
     var viewModel: SearchListViewModel?
+    var filterViewController: FilterViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
+
+        //initiate search bar
+        searchBar = UISearchBar()
+        searchBar?.sizeToFit()
+        searchBar?.placeholder = "Restaurants"
+        searchBar?.delegate = self
+        navigationItem.titleView = searchBar
+
+        filterButton = UIButton()
+        filterButton?.setTitle("Filter", for: .focused)
+
+         //set progress indicator style
+        FTIndicator.setIndicatorStyle(.dark)
+
+        //adjust row height
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
+
+        //create view model
         viewModel = SearchListViewModel()
         viewModel?.delegate = self
-        viewModel?.search(key: "vegan")
+        
+        FTIndicator.showProgressWithmessage("Loading...", userInteractionEnable: false)
+        viewModel?.search(key: "Indian")
+
+
+
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -32,13 +59,55 @@ class SearchListViewController: UIViewController, UITableViewDataSource {
         return cell
     }
 
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let viewModel = self.viewModel else {
             return 0
         }
 
-        return viewModel.businessCount
+        return viewModel.rowCount()
     }
+
+    @IBAction func filterButtonTap(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        self.filterViewController = storyboard.instantiateViewController(withIdentifier: "FilterViewController") as? FilterViewController
+
+        guard let filterViewController = self.filterViewController else {
+            return
+        }
+
+        filterViewController.delegate = self
+        filterViewController.viewModel = FilterViewModel(currentSearchFilter: (viewModel?.searchFilters)!)
+        self.present(filterViewController, animated: true, completion: nil)
+
+    }
+
+}
+
+extension SearchListViewController : UISearchBarDelegate {
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        viewModel?.isSearchActive = true
+
+    }
+
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        print()
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print()
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print()
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel?.search(key: searchText)
+        FTIndicator.showToastMessage("Searching...")
+    }
+
 }
 
 extension SearchListViewController : SearchListViewModelListener {
@@ -46,11 +115,39 @@ extension SearchListViewController : SearchListViewModelListener {
     func dataReady() {
         print("dataReady")
         print(viewModel?.businesses ?? "")
+        FTIndicator.dismissProgress()
         tableView.reloadData()
+
 
     }
     func error(err: String) {
         print(err)
+        FTIndicator.dismissNotification()
     }
 }
+
+extension SearchListViewController : FilterViewControllerDelegate {
+
+    func searchButtonTapped(vc: FilterViewController, updatedSearchFilter: SearchFilters){
+        self.viewModel?.searchFilters = updatedSearchFilter
+        
+        guard let filterViewController = self.filterViewController else {
+            return
+        }
+        filterViewController.dismiss(animated: true, completion: nil)
+
+        //apply new filters
+        FTIndicator.showProgressWithmessage("Applying filter...", userInteractionEnable: false)
+        viewModel?.search()
+    }
+
+    func cancelButtonTapped(vc: FilterViewController){
+        guard let filterViewController = self.filterViewController else {
+            return
+        }
+        filterViewController.dismiss(animated: true, completion: nil)
+    }
+}
+
+
 

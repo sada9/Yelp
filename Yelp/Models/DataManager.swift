@@ -18,9 +18,6 @@ let yelpToken = "XqYDOzkkd0LdsYjmgllH4vRSlBzunW7T"
 let yelpTokenSecret = "LsKLklj3QaaNQnDuWdQ3acPMc4Y"
 let yelpBaseURL  = "https://api.yelp.com/v2/search"
 
-enum SortType: Int {
-    case bestMatched = 0, distance, highestRated
-}
 
 protocol DataManagerListener: class {
     func finishedFetchingData(result : Result)
@@ -31,17 +28,43 @@ enum Result {
     case Failure(String)
 }
 
+struct Filter {
+    var name: String?
+    var value: String?
+    var isOn: Bool = false
+
+    init(name: String, value: String?, isOn: Bool) {
+        self.name = name
+        self.value = value
+        self.isOn = isOn
+    }
+}
+
+struct SearchFilters {
+    var sortBy: Filter?
+    var categories: [Filter]?
+    var deals: Filter?
+    var distance: Filter?
+}
+
 class DataManager {
 
     static var sharedInstance = DataManager()
     weak var delegate: DataManagerListener?
 
-    func search(withTerm term: String, sort: SortType?, categories: [String]?, deals: Bool?) {
+    func  search(withTerm term: String, filter: SearchFilters) {
+        let categories = filter.categories?.map({$0.name}) as? [String]
+
+        search(withTerm: term, sort: filter.sortBy?.value , categories: categories,
+               radiusFilter: filter.distance?.value, deals: filter.deals?.isOn)
+    }
+
+    func search(withTerm term: String, sort: String?, categories: [String]?, radiusFilter: String?, deals: Bool?) {
 
         var parameters: [String : AnyObject] = ["term": term as AnyObject, "ll": "37.785771,-122.406165" as AnyObject]
 
         if sort != nil {
-            parameters["sort"] = sort!.rawValue as AnyObject?
+            parameters["sort"] = sort as AnyObject?
         }
 
         if categories != nil {
@@ -50,6 +73,12 @@ class DataManager {
 
         if deals != nil {
             parameters["deals_filter"] = deals! as AnyObject?
+        }
+
+        if radiusFilter != nil {
+            if Int(radiusFilter!)! > 0 {
+                parameters["radius_filter"] = radiusFilter as AnyObject?
+            }
         }
 
         let oauthswift  = OAuth1Swift(
@@ -68,7 +97,7 @@ class DataManager {
                                         let jsonDict = try? response.jsonObject()
                                         self.processResponse(response: jsonDict as! NSDictionary)
         },
-                                      failure: { error in self.delegate?.finishedFetchingData(result: .Failure("Failed to parse response"))
+                                      failure: { error in self.delegate?.finishedFetchingData(result: .Failure("Failed to parse response \(error)"))
         })
 
     }
