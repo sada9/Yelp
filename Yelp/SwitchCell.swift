@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SevenSwitch
 
 protocol SwitchCellDelegate {
     func switchChanged(cell: SwitchCell, isSwitchOn: Bool)
@@ -17,7 +18,7 @@ class SwitchCell: UITableViewCell {
     @IBOutlet weak var filterLabel: UILabel!
     @IBOutlet weak var swich: UISwitch!
 
-    //@IBOutlet weak var filterSwitch: SevenSwitch!
+    @IBOutlet weak var filterSwitch: SevenSwitch!
 
 
     var delegate: SwitchCellDelegate?
@@ -31,7 +32,7 @@ class SwitchCell: UITableViewCell {
         self.layer.cornerRadius = 4
         self.layer.masksToBounds = true
 
-         //filterSwitch.addTarget(self, action: #selector(SwitchCell.switchValueChanged), for: UIControlEvents.valueChanged)
+         filterSwitch.addTarget(self, action: #selector(SwitchCell.switchValueChanged), for: UIControlEvents.valueChanged)
     }
 
     override func layoutSubviews() {
@@ -55,7 +56,8 @@ class SwitchCell: UITableViewCell {
     }
 
     func switchValueChanged() {
-        //delegate?.switchChanged(cell: self, isSwitchOn: filterSwitch.on)
+        print("switchValueChanged")
+        delegate?.switchChanged(cell: self, isSwitchOn: filterSwitch.on)
     }
 
     override func prepareForReuse() {

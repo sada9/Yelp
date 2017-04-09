@@ -60,7 +60,7 @@ class FilterViewModel {
             case 0:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell") as! SwitchCell
                 cell.filterLabel.text = featuredFilter[indexPath.row].name
-                cell.swich.isOn = featuredFilter[indexPath.row].isOn
+                cell.filterSwitch.on = featuredFilter[indexPath.row].isOn
                 cell.delegate = self
                 cell.cellIndexPath = indexPath
                 return cell
@@ -119,7 +119,7 @@ class FilterViewModel {
 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell") as! SwitchCell
                 cell.filterLabel.text = categoryFilter[indexPath.row].name
-                cell.swich.isOn = categoryFilter[indexPath.row].isOn
+                cell.filterSwitch.on = categoryFilter[indexPath.row].isOn
                 cell.delegate = self
                 cell.cellIndexPath = indexPath
                 return cell

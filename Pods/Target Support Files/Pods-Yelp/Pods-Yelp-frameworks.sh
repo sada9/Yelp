@@ -87,11 +87,13 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/AFNetworking/AFNetworking.framework"
   install_framework "$BUILT_PRODUCTS_DIR/FTIndicator/FTIndicator.framework"
   install_framework "$BUILT_PRODUCTS_DIR/OAuthSwift/OAuthSwift.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/SevenSwitch/SevenSwitch.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Unbox/Unbox.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/AFNetworking/AFNetworking.framework"
   install_framework "$BUILT_PRODUCTS_DIR/FTIndicator/FTIndicator.framework"
   install_framework "$BUILT_PRODUCTS_DIR/OAuthSwift/OAuthSwift.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/SevenSwitch/SevenSwitch.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Unbox/Unbox.framework"
 fi

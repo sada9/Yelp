@@ -8,5 +8,5 @@ target 'Yelp' do
     pod 'FTIndicator'
     pod 'Unbox'
     pod 'OAuthSwift'
-    #pod 'SevenSwitch'
+    pod 'SevenSwitch', '~> 2.1'
 end

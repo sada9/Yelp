@@ -22,20 +22,23 @@ PODS:
   - FTIndicator/FTProgressIndicator (1.2.0)
   - FTIndicator/FTToastIndicator (1.2.0)
   - OAuthSwift (1.1.1)
+  - SevenSwitch (2.1.0)
   - Unbox (2.4.0)
 
 DEPENDENCIES:
   - AFNetworking
   - FTIndicator
   - OAuthSwift
+  - SevenSwitch (~> 2.1)
   - Unbox
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   FTIndicator: e1c035b99b8df1b1a40702b37cdc12fac5dd057c
   OAuthSwift: 6e3a103b3e5639411769cc7e199ec7e14bd1547f
+  SevenSwitch: 5543327829b7bec5b29b73bad5f3cc3f92c1736d
   Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
 
-PODFILE CHECKSUM: 0ba697e347525d74cf3d50b173a67fb939b10b16
+PODFILE CHECKSUM: 52f29231984868607502237070854ff959858369
 
 COCOAPODS: 1.1.1
