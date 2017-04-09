@@ -52,16 +52,16 @@ class DataManager {
     static var sharedInstance = DataManager()
     weak var delegate: DataManagerListener?
 
-    func  search(withTerm term: String, filter: SearchFilters) {
+    func  search(withTerm term: String, filter: SearchFilters, offset: Int?) {
         let categories = filter.categories?.map({$0.name}) as? [String]
 
         search(withTerm: term, sort: filter.sortBy?.value , categories: categories,
-               radiusFilter: filter.distance?.value, deals: filter.deals?.isOn)
+               radiusFilter: filter.distance?.value, deals: filter.deals?.isOn, offset: offset)
     }
 
-    func search(withTerm term: String, sort: String?, categories: [String]?, radiusFilter: String?, deals: Bool?) {
-
-        var parameters: [String : AnyObject] = ["term": term as AnyObject, "ll": "37.785771,-122.406165" as AnyObject]
+    func search(withTerm term: String, sort: String?, categories: [String]?, radiusFilter: String?, deals: Bool?, offset: Int? = 0) {
+        //"37.785771,-122.406165"
+        var parameters: [String : AnyObject] = ["term": term as AnyObject, "ll": "37.386051, -122.083855" as AnyObject]
 
         if sort != nil {
             parameters["sort"] = sort as AnyObject?
@@ -79,6 +79,10 @@ class DataManager {
             if Int(radiusFilter!)! > 0 {
                 parameters["radius_filter"] = radiusFilter as AnyObject?
             }
+        }
+
+        if let offset = offset {
+            parameters["offset"] = offset as AnyObject?
         }
 
         let oauthswift  = OAuth1Swift(

@@ -19,6 +19,7 @@ class SearchListViewController: UIViewController, UITableViewDataSource {
    
     var viewModel: SearchListViewModel?
     var filterViewController: FilterViewController?
+    var isMoreDataLoading = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,6 +83,16 @@ class SearchListViewController: UIViewController, UITableViewDataSource {
 
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        let indexPath: IndexPath! = tableView.indexPathForSelectedRow
+        let business = viewModel?.business(at: indexPath)
+
+        let detailsViewController = segue.destination as! DetailsViewController
+        detailsViewController.viewModel = DetailsViewModel(business: business!)
+        
+    }
+
 }
 
 extension SearchListViewController : UISearchBarDelegate {
@@ -117,6 +128,7 @@ extension SearchListViewController : SearchListViewModelListener {
         print(viewModel?.businesses ?? "")
         FTIndicator.dismissProgress()
         tableView.reloadData()
+        isMoreDataLoading = false
 
 
     }
@@ -146,6 +158,24 @@ extension SearchListViewController : FilterViewControllerDelegate {
             return
         }
         filterViewController.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension SearchListViewController :  UIScrollViewDelegate {
+    // enable inifite scroll
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+
+                isMoreDataLoading = true
+                viewModel?.search(offset: 1)
+            }
+        }
     }
 }
 

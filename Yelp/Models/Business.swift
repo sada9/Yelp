@@ -17,6 +17,13 @@ struct Business: Unboxable {
     let reviewCount: String
     let categories: [[String]]
     let distance: String
+    let snippetText: String
+
+    var displayPhone : String
+    var phone : String
+
+    var lat : Double
+    var lon : Double
 
     init(unboxer: Unboxer) throws {
         self.imageUrl = try unboxer.unbox(key: "image_url")
@@ -26,5 +33,11 @@ struct Business: Unboxable {
         self.reviewCount = try unboxer.unbox(key: "review_count")
         self.categories = try unboxer.unbox(key: "categories")
         self.distance = try unboxer.unbox(key: "distance")
+        self.displayPhone = try unboxer.unbox(key: "display_phone")
+        self.phone = try unboxer.unbox(key: "phone")
+        self.lat = ((unboxer.dictionary["location"] as! NSDictionary)["coordinate"]  as! NSDictionary)["latitude"]! as! Double
+        self.lon = ((unboxer.dictionary["location"] as! NSDictionary)["coordinate"]  as! NSDictionary)["longitude"]! as! Double
+        self.snippetText = unboxer.dictionary["snippet_text"] as! String
+
     }
 }

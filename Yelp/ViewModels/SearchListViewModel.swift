@@ -21,6 +21,8 @@ class SearchListViewModel {
     var isSearchActive = false
     var searchFilters: SearchFilters?
     var lastSearchKey: String?
+    let lastOffset: Int? = 0
+    
 
      private var businessCount: Int {
         get {
@@ -53,11 +55,12 @@ class SearchListViewModel {
 
     func search(key: String) {
         lastSearchKey = key
-        dataManager.search(withTerm: lastSearchKey!, filter: searchFilters!)
+        dataManager.search(withTerm: lastSearchKey!, filter: searchFilters!, offset: 0)
     }
 
-    func search() {
-        dataManager.search(withTerm: lastSearchKey!, filter: searchFilters!)
+    func search(offset: Int = 0) {
+
+        dataManager.search(withTerm: lastSearchKey!, filter: searchFilters!, offset: offset)
     }
 
     func business(at indexPath: IndexPath) -> Business? {
@@ -100,3 +103,6 @@ extension SearchListViewModel : DataManagerListener {
     }
     
 }
+
+
+

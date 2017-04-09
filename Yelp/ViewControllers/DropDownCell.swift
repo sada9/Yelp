@@ -23,10 +23,10 @@ class DropDownCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         super.awakeFromNib()
-        self.layer.borderWidth = 1.5
+        /*self.layer.borderWidth = 1.5
         self.layer.borderColor = UIColor.lightGray.cgColor
         self.layer.cornerRadius = 4
-        self.layer.masksToBounds = true
+        self.layer.masksToBounds = true */
 
     }
 
@@ -35,10 +35,10 @@ class DropDownCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.bounds = CGRect(x: self.bounds.origin.x,
+       /* self.bounds = CGRect(x: self.bounds.origin.x,
                              y: self.bounds.origin.y,
                              width: (self.superview?.bounds.size.width)! - 40,
-                             height: self.bounds.size.height)
+                             height: self.bounds.size.height) */
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

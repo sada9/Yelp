@@ -27,23 +27,8 @@ class SwitchCell: UITableViewCell {
     override func awakeFromNib() {
 
         super.awakeFromNib()
-        self.layer.borderWidth = 1.5
-        self.layer.borderColor = UIColor.lightGray.cgColor
-        self.layer.cornerRadius = 4
-        self.layer.masksToBounds = true
 
          filterSwitch.addTarget(self, action: #selector(SwitchCell.switchValueChanged), for: UIControlEvents.valueChanged)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-         self.bounds = CGRect(x: self.bounds.origin.x,
-                             y: self.bounds.origin.y,
-                             width: (self.superview?.bounds.size.width)! - 40,
-                             height: self.bounds.size.height)
-       
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
