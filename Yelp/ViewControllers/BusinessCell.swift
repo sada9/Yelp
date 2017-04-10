@@ -18,13 +18,14 @@ class BusinessCell: UITableViewCell {
     @IBOutlet weak var address: UILabel!
     @IBOutlet weak var reviewsCount: UILabel!
     @IBOutlet weak var name: UILabel!
+    var indexPath: IndexPath!
 
     var viewModel: BusinessCellViewModel?
 
     var business: Business! {
         didSet {
             self.viewModel = BusinessCellViewModel(business: business)
-            self.name.text = business.name
+            self.name.text = "\(indexPath.row+1). \(business.name)"
             var address = business.address
             address.remove(at: address.count - 1 )
             self.address.text = address.joined(separator: ", ")

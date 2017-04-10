@@ -20,6 +20,7 @@ class SearchListViewController: UIViewController, UITableViewDataSource {
     var viewModel: SearchListViewModel?
     var filterViewController: FilterViewController?
     var isMoreDataLoading = false
+    var offset = 10
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,15 +48,13 @@ class SearchListViewController: UIViewController, UITableViewDataSource {
         viewModel?.delegate = self
         
         FTIndicator.showProgressWithmessage("Loading...", userInteractionEnable: false)
-        viewModel?.search(key: "Indian")
-
-
-
+        viewModel?.search()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
 
+        cell.indexPath = indexPath
         cell.business = viewModel?.business(at: indexPath)
         return cell
     }
@@ -99,15 +98,17 @@ extension SearchListViewController : UISearchBarDelegate {
 
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         viewModel?.isSearchActive = true
-
+        searchBar.setShowsCancelButton(true, animated: true)
     }
 
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        print()
+        searchBar.setShowsCancelButton(false, animated: true)
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print()
+        viewModel?.isSearchActive = false
+        viewModel?.search(key: "Indian")
+        searchBar.setShowsCancelButton(false, animated: true)
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -115,8 +116,10 @@ extension SearchListViewController : UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel?.search(key: searchText)
-        FTIndicator.showToastMessage("Searching...")
+        if searchText.characters.count > 1 {
+            viewModel?.search(key: searchText)
+            FTIndicator.showToastMessage("Searching...")
+        }
     }
 
 }
@@ -171,11 +174,21 @@ extension SearchListViewController :  UIScrollViewDelegate {
 
             // When the user has scrolled past the threshold, start requesting
             if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
-
+                addTableFooter()
                 isMoreDataLoading = true
-                viewModel?.search(offset: 1)
+                offset+=10
+                viewModel?.search(offset: offset, moreData: true)
             }
         }
+    }
+
+    func addTableFooter() {
+        let tableFooterView: UIView = UIView(frame: CGRect(x:0, y:0, width: self.tableView.frame.width , height: 50))
+        let loadingView: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        loadingView.startAnimating()
+        loadingView.center = tableFooterView.center
+        tableFooterView.addSubview(loadingView)
+        self.tableView.tableFooterView = tableFooterView
     }
 }
 

@@ -51,10 +51,9 @@ class DataManager {
 
     static var sharedInstance = DataManager()
     weak var delegate: DataManagerListener?
-
+    
     func  search(withTerm term: String, filter: SearchFilters, offset: Int?) {
-        let categories = filter.categories?.map({$0.name}) as? [String]
-
+        let categories = filter.categories?.map({$0.value}) as? [String]
         search(withTerm: term, sort: filter.sortBy?.value , categories: categories,
                radiusFilter: filter.distance?.value, deals: filter.deals?.isOn, offset: offset)
     }
@@ -117,13 +116,14 @@ class DataManager {
                 do {
                     let business: Business = try unbox(dictionary: item as! UnboxableDictionary)
                     businessResults.append(business)
-                    delegate?.finishedFetchingData(result: .Success(businessResults))
                 }
                 catch {
                      delegate?.finishedFetchingData(result: .Failure("Failed to parse response"))
                     print("Unable to Initialize Business Data")
                 }
             }
+
+            delegate?.finishedFetchingData(result: .Success(businessResults))
         }
     }
 }

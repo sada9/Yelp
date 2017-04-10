@@ -20,8 +20,9 @@ class SearchListViewModel {
     private let dataManager = DataManager()
     var isSearchActive = false
     var searchFilters: SearchFilters?
-    var lastSearchKey: String?
+    var lastSearchKey: String = "Popular"
     let lastOffset: Int? = 0
+    var getmoreData = false
     
 
      private var businessCount: Int {
@@ -53,18 +54,21 @@ class SearchListViewModel {
                                  distance: Filter(name: "Auto", value: "-1", isOn: true))
     }
 
-    func search(key: String) {
-        lastSearchKey = key
-        dataManager.search(withTerm: lastSearchKey!, filter: searchFilters!, offset: 0)
+    func search() {
+        dataManager.search(withTerm: lastSearchKey, filter: searchFilters!, offset: 0)
     }
 
-    func search(offset: Int = 0) {
+    func search(key: String) {
+        lastSearchKey = key
+        dataManager.search(withTerm: lastSearchKey, filter: searchFilters!, offset: 0)
+    }
 
-        dataManager.search(withTerm: lastSearchKey!, filter: searchFilters!, offset: offset)
+    func search(offset: Int = 0, moreData: Bool = false) {
+        getmoreData = moreData
+        dataManager.search(withTerm: lastSearchKey, filter: searchFilters!, offset: offset)
     }
 
     func business(at indexPath: IndexPath) -> Business? {
-
         if isSearchActive {
             return filteredBusinesses?[indexPath.row]
         }
@@ -91,10 +95,17 @@ extension SearchListViewModel : DataManagerListener {
                 self.filteredBusinesses = result
             }
             else {
-                self.businesses = result
-            }
 
+                if getmoreData {
+                    self.businesses?.append(contentsOf: result)
+                }
+                else {
+                    self.businesses = result
+                }
+
+            }
             delegate?.dataReady()
+            getmoreData = false
 
         case .Failure(let errorStr):
             print(errorStr)

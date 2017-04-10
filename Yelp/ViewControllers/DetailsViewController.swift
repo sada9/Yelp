@@ -24,8 +24,8 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var snippetText: UILabel!
     @IBOutlet weak var distance: UILabel!
 
+    @IBOutlet weak var phone: UIButton!
     @IBOutlet weak var address: UILabel!
-   // @IBOutlet weak var phoneNumber: UILabel!
 
 
     override func viewDidLoad() {
@@ -38,7 +38,7 @@ class DetailsViewController: UIViewController {
         snippetText.text = viewModel.snippetText
         distance.text = viewModel.distance
         address.text = viewModel.address
-
+        phone.setTitle("+1"+viewModel.phone, for: .normal)
         //set map view
 
         let coordinate = CLLocationCoordinate2DMake(viewModel.lat, viewModel.lon)
@@ -51,5 +51,11 @@ class DetailsViewController: UIViewController {
         self.mapView.setRegion(adjustedRegion, animated: true)
     }
 
+    @IBAction func phoneNumberTapped(_ sender: UIButton) {
+        UIApplication.shared.open(URL(string: "telprompt://+1\(viewModel.phone)")!, options: [:]) { (flag) in
+            NSLog("How did call go?")
+        }
+
+    }
 
 }
